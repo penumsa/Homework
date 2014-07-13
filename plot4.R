@@ -1,4 +1,4 @@
-## plot2.R script - Creates the plot1 from "Electric Power Consumption" data file
+## plot4.R script - Creates the plot1 from "Electric Power Consumption" data file
 ## Data file location -
 ## https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip
 ## Get data file
@@ -31,8 +31,24 @@ datetime <- paste(sPwr$Date, sPwr$Time)
 datm <- strptime(datetime, format = "%d/%m/%Y %H:%M:%S")
 sPwr <- cbind(datm,sPwr)
 
-## Step 7 - Set png attributes to required width,height and Plot the histogram 
-##          for the "Global_active_power" column and turn off device
-png(filename = "data/plot2.png", width = 480, height = 480, units = "px", pointsize = 12, bg = "white", res = NA, restoreConsole = TRUE)
+## Step 7 - Set png attributes to required width,height and Plot the 4 graphs 
+##          and turn off device
+png(filename = "data/plot4.png", width = 480, height = 480, units = "px", pointsize = 12, bg = "white", res = NA, restoreConsole = TRUE)
+
+par(mfrow = c(2,2))
+
+## Plot 1 (Top left) - Global_active_power
 with(sPwr, plot(datm,Global_active_power, type="l", xlab="", ylab="Global Active Power (Kilowatts)"))
+
+# Plot 2 (Top right) - datetime vs Voltage
+with(sPwr, plot(datm,Voltage, type="l", xlab="datetime", ylab="Voltage"))
+
+# plot 3 - Energy sub metering
+plot(x=sPwr$datm, y=sPwr$Sub_metering_1, type="l", xlab="", ylab="Energy sub metering")
+lines(x=sPwr$datm, y=sPwr$Sub_metering_2, col="red")
+lines(x=sPwr$datm, y=sPwr$Sub_metering_3, col="blue")
+legend("topright" , col = c("black", "red", "blue"), legend = c("Sub_metering_1 ","Sub_metering_2","Sub_metering_3"),lty=c(1,1,2))
+
+#Plot 4 - Global_reactive_power
+with(sPwr, plot(datm,Global_reactive_power, type="l", xlab="datetime", ylab="Global_reactive_power"))
 dev.off()
